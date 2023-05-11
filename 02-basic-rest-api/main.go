@@ -1,3 +1,16 @@
+// @title          Recipes API
+// @version         1.0.0
+//
+// @description     This is a basic recipes API in go (Gin).
+
+// @contact.name   Roshan Lamichhane
+
+// @host      localhost:8080
+// @BasePath  /
+
+// @accept application/json
+// @produce pplication/json
+
 package main
 
 import (
@@ -6,8 +19,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/roshanlc/go-gin-backends/02-basic-rest-api/docs"
 	"github.com/roshanlc/go-gin-backends/02-basic-rest-api/models"
 	"github.com/rs/xid"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // data storage
@@ -18,6 +34,14 @@ func init() {
 	recipes = make([]models.Recipe, 0)
 }
 
+// NewRecipeHandler
+// @Summary      Create a new recipe
+// @Description  Create a new recipe
+// @Accept       json
+// @Produce      json
+// @Success      201  {object}  models.Recipe
+// @Failure      400
+// @Router       /recipes [post]
 // handler for POST Method to "/recipes" endpoint
 func NewRecipeHandler(c *gin.Context) {
 	var recipe models.Recipe
@@ -130,5 +154,7 @@ func main() {
 	router.PUT("/recipes/:id", UpdateRecipeHandler)
 	router.DELETE("/recipes/:id", DeleteRecipeHandler)
 	router.GET("/recipes/search", SearchHandler)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":9000")
 }
