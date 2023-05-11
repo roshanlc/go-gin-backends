@@ -1,11 +1,11 @@
 // @title          Recipes API
 // @version         1.0.0
 //
-// @description     This is a basic recipes API in go (Gin).
+// @description     This is a basic recipes API in go (Gin). A CRUD demonstration.
 
 // @contact.name   Roshan Lamichhane
 
-// @host      localhost:8080
+// @host      localhost:9000
 // @BasePath  /
 
 // @accept application/json
@@ -34,7 +34,7 @@ func init() {
 	recipes = make([]models.Recipe, 0)
 }
 
-// NewRecipeHandler
+// NewRecipeHandler godoc
 // @Summary      Create a new recipe
 // @Description  Create a new recipe
 // @Accept       json
@@ -62,11 +62,27 @@ func NewRecipeHandler(c *gin.Context) {
 
 }
 
+// ListRecipesHandler godoc
+// @Summary      List all the recipes
+// @Description  List all the recipes
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}  models.Recipe
+// @Failure      500
+// @Router       /recipes [get]
 // handler for GET Method to "/recipes" endpoint
 func ListRecipesHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, recipes)
 }
 
+// UpdateRecipeHandler godoc
+// @Summary      Update a recipe
+// @Description  Update a recipe
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Recipe
+// @Failure      404
+// @Router       /recipes/id [put]
 // handler for PUT Method to "/recipes/:id" endpoint
 func UpdateRecipeHandler(c *gin.Context) {
 	id := c.Param("id")
@@ -99,6 +115,14 @@ func UpdateRecipeHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, recipe)
 }
 
+// DeleteRecipeHandler
+// @Summary      Delete a recipe
+// @Description  Delete a recipe
+// @Accept       json
+// @Produce      json
+// @Success      200
+// @Failure      404
+// @Router       /recipes/id [delete]
 // handler for DELETE Method to "/recipes/:id" endpoint
 func DeleteRecipeHandler(c *gin.Context) {
 	id := c.Param("id")
@@ -149,12 +173,17 @@ func SearchHandler(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
+
+	// routes for recipes CRUD
 	router.POST("/recipes", NewRecipeHandler)
 	router.GET("/recipes", ListRecipesHandler)
 	router.PUT("/recipes/:id", UpdateRecipeHandler)
 	router.DELETE("/recipes/:id", DeleteRecipeHandler)
 	router.GET("/recipes/search", SearchHandler)
+
+	// route for swagger
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	// r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// run the server
 	router.Run(":9000")
 }
