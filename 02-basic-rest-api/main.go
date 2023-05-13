@@ -18,6 +18,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/roshanlc/go-gin-backends/02-basic-rest-api/docs"
 	"github.com/roshanlc/go-gin-backends/02-basic-rest-api/models"
@@ -173,6 +174,9 @@ func SearchHandler(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
+
+	// enable global cors
+	router.Use(cors.New(cors.Config{AllowAllOrigins: true}))
 
 	// routes for recipes CRUD
 	router.POST("/recipes", NewRecipeHandler)
